@@ -1,6 +1,6 @@
 'use client';
 
-import { SleepRecord } from '@/types/sleep';
+import { SleepRecord, WAKE_FEELING_ICONS, WAKE_FEELING_LABELS } from '@/types/sleep';
 import { formatDuration, getQualityLabel } from '@/lib/sleepUtils';
 
 interface Props {
@@ -15,7 +15,7 @@ export default function SleepHistory({ records, onEdit, onDelete }: Props) {
   if (sorted.length === 0) {
     return (
       <div className="glass-card p-8 text-center text-gray-400 animate-fade-in">
-        <div className="text-4xl mb-3">🌙</div>
+        <div className="text-4xl mb-3">{'\uD83C\uDF19'}</div>
         <p>まだ睡眠記録がありません</p>
         <p className="text-sm mt-1">上のフォームから記録を始めましょう</p>
       </div>
@@ -44,8 +44,11 @@ export default function SleepHistory({ records, onEdit, onDelete }: Props) {
           style={{ animationDelay: `${i * 50}ms` }}
         >
           <div className="flex justify-between items-start">
-            <div>
-              <div className="text-sm text-gray-400">{formatDate(record.date)}</div>
+            <div className="flex-1">
+              <div className="flex items-center gap-2">
+                <div className="text-sm text-gray-400">{formatDate(record.date)}</div>
+                <span className="text-sm">{WAKE_FEELING_ICONS[record.wakeFeeling]}</span>
+              </div>
               <div className="flex items-baseline gap-2 mt-1">
                 <span className={`text-xl font-bold ${getDurationColor(record.duration)}`}>
                   {formatDuration(record.duration)}
@@ -61,12 +64,24 @@ export default function SleepHistory({ records, onEdit, onDelete }: Props) {
                       key={s}
                       className={`text-sm ${s <= record.quality ? 'text-yellow-400' : 'text-gray-600'}`}
                     >
-                      ★
+                      {'\u2605'}
                     </span>
                   ))}
                 </div>
                 <span className="text-xs text-gray-500">{getQualityLabel(record.quality)}</span>
+                <span className="text-xs text-gray-600">|</span>
+                <span className="text-xs text-gray-500">{WAKE_FEELING_LABELS[record.wakeFeeling]}</span>
               </div>
+              {record.bodyScore && (
+                <div className="flex items-center gap-1 mt-1">
+                  <span className="text-xs text-gray-500">体調:</span>
+                  {[1, 2, 3, 4, 5].map(s => (
+                    <span key={s} className={`text-xs ${s <= record.bodyScore ? 'text-indigo-400' : 'text-gray-700'}`}>
+                      {'\u25CF'}
+                    </span>
+                  ))}
+                </div>
+              )}
               {record.memo && (
                 <p className="text-xs text-gray-500 mt-2 line-clamp-1">{record.memo}</p>
               )}
@@ -94,14 +109,14 @@ export default function SleepHistory({ records, onEdit, onDelete }: Props) {
               </button>
             </div>
           </div>
-          {/* Factor badges */}
+          {/* Factor & emotion badges */}
           <div className="flex flex-wrap gap-1 mt-2">
-            {record.factors.caffeine && <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-900/40 text-amber-400">☕カフェイン</span>}
-            {record.factors.exercise && <span className="text-[10px] px-2 py-0.5 rounded-full bg-green-900/40 text-green-400">🏃運動</span>}
-            {record.factors.stress && <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-900/40 text-red-400">😰ストレス</span>}
-            {record.factors.screenTime && <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-900/40 text-blue-400">📱スクリーン</span>}
-            {record.factors.alcohol && <span className="text-[10px] px-2 py-0.5 rounded-full bg-orange-900/40 text-orange-400">🍺飲酒</span>}
-            {record.factors.nap && <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-900/40 text-purple-400">😴昼寝</span>}
+            {record.factors.caffeine && <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-900/40 text-amber-400">{'\u2615'}カフェイン</span>}
+            {record.factors.exercise && <span className="text-[10px] px-2 py-0.5 rounded-full bg-green-900/40 text-green-400">{'\uD83C\uDFC3'}運動</span>}
+            {record.factors.stress && <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-900/40 text-red-400">{'\uD83D\uDE30'}ストレス</span>}
+            {record.factors.screenTime && <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-900/40 text-blue-400">{'\uD83D\uDCF1'}スクリーン</span>}
+            {record.factors.alcohol && <span className="text-[10px] px-2 py-0.5 rounded-full bg-orange-900/40 text-orange-400">{'\uD83C\uDF7A'}飲酒</span>}
+            {record.factors.nap && <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-900/40 text-purple-400">{'\uD83D\uDE34'}昼寝</span>}
           </div>
         </div>
       ))}
