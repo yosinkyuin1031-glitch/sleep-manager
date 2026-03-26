@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0f0d1a;
+  --background: #0a0814;
   --foreground: #e8e6f0;
   --card-bg: #1a1730;
   --card-border: #2d2a45;
@@ -29,9 +29,26 @@
 }
 
 body {
-  background: var(--background);
+  background: linear-gradient(180deg, #0a0814 0%, #0d0b1a 50%, #100e20 100%);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  min-height: 100vh;
+}
+
+/* Night sky gradient background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(124, 58, 237, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(67, 56, 202, 0.04) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
 }
 
 * {
@@ -45,7 +62,7 @@ input[type="number"],
 select,
 textarea {
   color-scheme: dark;
-  background: #1a1730;
+  background: rgba(26, 23, 48, 0.9);
   border: 1px solid #2d2a45;
   border-radius: 0.5rem;
   padding: 0.5rem 0.75rem;
@@ -53,13 +70,14 @@ textarea {
   font-size: 1rem;
   width: 100%;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
   border-color: #7c3aed;
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.15);
 }
 
 @keyframes fadeIn {
@@ -77,6 +95,11 @@ textarea:focus {
   50% { box-shadow: 0 0 40px rgba(124, 58, 237, 0.6); }
 }
 
+@keyframes stepSlide {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
 .animate-fade-in {
   animation: fadeIn 0.3s ease-out;
 }
@@ -90,12 +113,50 @@ textarea:focus {
 }
 
 .step-animate {
-  animation: fadeIn 0.3s ease-out;
+  animation: stepSlide 0.3s ease-out;
 }
 
 .glass-card {
-  background: rgba(26, 23, 48, 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(45, 42, 69, 0.6);
+  background: rgba(26, 23, 48, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(45, 42, 69, 0.5);
   border-radius: 1rem;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+.glass-card:hover {
+  border-color: rgba(45, 42, 69, 0.7);
+}
+
+/* Custom range slider */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  background: #252240;
+  border-radius: 3px;
+  border: none;
+  padding: 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #7c3aed;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(124, 58, 237, 0.4);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #7c3aed;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 0 8px rgba(124, 58, 237, 0.4);
 }

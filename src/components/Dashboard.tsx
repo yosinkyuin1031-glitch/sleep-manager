@@ -12,6 +12,9 @@ import {
 } from '@/lib/sleepUtils';
 import { calculateStreak } from '@/lib/storage';
 import { downloadCSV } from '@/lib/exportUtils';
+import TrendChart from './TrendChart';
+import GoalAchievement from './GoalAchievement';
+import ExportPanel from './ExportPanel';
 
 interface Props {
   records: SleepRecord[];
@@ -440,18 +443,14 @@ export default function Dashboard({ records, goals }: Props) {
         </div>
       )}
 
-      {/* Export Button */}
-      <div className="flex justify-center">
-        <button
-          onClick={() => downloadCSV(records)}
-          className="px-6 py-3 rounded-xl bg-[#252240] text-gray-300 hover:bg-[#2d2a50] transition-all text-sm font-medium flex items-center gap-2"
-        >
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-          </svg>
-          CSVエクスポート
-        </button>
-      </div>
+      {/* Trend Chart (Weekly/Monthly) */}
+      <TrendChart records={records} goals={goals} />
+
+      {/* Goal Achievement */}
+      <GoalAchievement records={records} goals={goals} />
+
+      {/* Export Panel (PDF + CSV) */}
+      <ExportPanel records={records} goals={goals} />
     </div>
   );
 }
